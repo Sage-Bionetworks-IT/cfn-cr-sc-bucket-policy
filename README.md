@@ -21,7 +21,7 @@ Create a custom resource in your cloud formation template. Here's an example:
       ServiceToken: !ImportValue
         'Fn::Sub': '${AWS::Region}-cfn-cr-sc-bucket-policy-FunctionArn'
       BucketName: !Ref S3Bucket
-      ExtraPrincipals: !Ref S3UserARNs
+      ExtraPrincipalArns: !Ref S3UserARNs
       RequireEncryption: True
 ```
 
@@ -29,7 +29,7 @@ The creation of the custom resource triggers the lambda. It creates an S3
 BucketPolicy.
 * `ServiceToken` refers to the ARN of the lambda function. You can follow the pattern given; see "Install Lambda into AWS" below for the stack that exports that value.
 * The only required property is `BucketName`, a String.
-* `ExtraPrincipals` is an optional CommaDelimitedList of valid IAM policy [principal](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_principal.html) strings.
+* `ExtraPrincipalArns` is an optional CommaDelimitedList of valid IAM policy [principal](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_principal.html) strings.
 * `RequireEncryption` is a boolean value; it will default to false if left out.
 
 ## Development

@@ -30,7 +30,7 @@ class TestGetParams(unittest.TestCase):
     event = {
       'ResourceProperties': {
         'BucketName': 'some-bucket',
-        'ExtraPrincipals': principals
+        'ExtraPrincipalArns': principals
       }
     }
     result = app.get_params(event)
@@ -42,7 +42,7 @@ class TestGetParams(unittest.TestCase):
     event = {
       'ResourceProperties': {
         'BucketName': 'some-bucket',
-        'ExtraPrincipals': principals
+        'ExtraPrincipalArns': principals
       }
     }
     result = app.get_params(event)

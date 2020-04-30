@@ -25,7 +25,7 @@ def get_params(event):
   if bucket_name is None:
     raise Exception('Required parameters: BucketName')
 
-  extra_principals = parameters.get('ExtraPrincipals', None)
+  extra_principals = parameters.get('ExtraPrincipalArns', None)
   if not extra_principals:
     extra_principals = []
   elif not isinstance(extra_principals, list):
