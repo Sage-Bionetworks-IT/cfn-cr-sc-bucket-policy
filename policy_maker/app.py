@@ -183,7 +183,13 @@ def delete(event, context):
   '''Delete the policy'''
   bucket_name, _, _ = get_params(event)
   s3 = get_client('s3')
-  s3.delete_bucket_policy(Bucket=bucket_name)
+  try:
+    s3.delete_bucket_policy(Bucket=bucket_name)
+  except ClientError as e:
+    log.debug(e.response['Error']['Message'])
+    # do not raise if the bucket has already been removed
+    if e['Error']['Code'] != 'NoSuchBucket':
+      raise e
   return event['PhysicalResourceId']
 
 
