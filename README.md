@@ -15,6 +15,15 @@ Inventory of source code and supporting files:
 ## Use in a Cloudformation Template
 Create a custom resource in your cloud formation template. Here's an example:
 ```yaml
+  S3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccessControl: Private
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+
   SCS3BucketPolicy:
     Type: Custom::SCS3BucketPolicy
     Properties:
@@ -29,7 +38,7 @@ The creation of the custom resource triggers the lambda. It creates an S3
 BucketPolicy.
 * `ServiceToken` refers to the ARN of the lambda function. You can follow the pattern given; see "Install Lambda into AWS" below for the stack that exports that value.
 * The only required property is `BucketName`, a String.
-* `ExtraPrincipalArns` is an optional CommaDelimitedList of valid IAM policy [principal](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_principal.html) strings.
+* `ExtraPrincipalArns` is one or more valid IAM policy [principals](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_principal.html).
 * `RequireEncryption` is a boolean value; it will default to false if left out.
 
 ## Development
