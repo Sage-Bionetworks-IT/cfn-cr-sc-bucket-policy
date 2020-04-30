@@ -34,9 +34,19 @@ class TestGetParams(unittest.TestCase):
       }
     }
     result = app.get_params(event)
+    self.assertCountEqual(principals, result[1])
 
-    for principal in principals:
-      self.assertIn(principal, result[1])
+
+  def test_string_principals_converted_to_list(self):
+    principals = 'foobar'
+    event = {
+      'ResourceProperties': {
+        'BucketName': 'some-bucket',
+        'ExtraPrincipals': principals
+      }
+    }
+    result = app.get_params(event)
+    self.assertCountEqual([principals], result[1])
 
 
   def test_require_encryption(self):

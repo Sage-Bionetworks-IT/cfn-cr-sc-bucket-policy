@@ -28,11 +28,10 @@ def get_params(event):
   extra_principals = parameters.get('ExtraPrincipals', None)
   if not extra_principals:
     extra_principals = []
-  elif isinstance(extra_principals, list):
-    # strip empties
-    extra_principals = [extra for extra in extra_principals if extra]
-  else:
-    raise ValueError('ExtraPrincipals must be type list')
+  elif not isinstance(extra_principals, list):
+    extra_principals = [extra_principals]
+  # strip empties
+  extra_principals = [extra for extra in extra_principals if extra]
 
   require_encryption = str(parameters.get('RequireEncryption', 'false'))
   if require_encryption.lower() == 'true':
