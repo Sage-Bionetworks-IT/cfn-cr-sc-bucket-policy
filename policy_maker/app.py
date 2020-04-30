@@ -188,7 +188,7 @@ def delete(event, context):
   except ClientError as e:
     log.debug(e.response['Error']['Message'])
     # do not raise if the bucket has already been removed
-    if e['Error']['Code'] != 'NoSuchBucket':
+    if e.response['Error']['Code'] != 'NoSuchBucket':
       raise e
   return event['PhysicalResourceId']
 
