@@ -30,7 +30,7 @@ BucketPolicy.
 * `ServiceToken` refers to the ARN of the lambda function. You can follow the pattern given; see "Install Lambda into AWS" below for the stack that exports that value.
 * The only required property is `BucketName`, a String.
 * `ExtraPrincipals` is an optional CommaDelimitedList of valid IAM policy [principal](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_principal.html) strings.
-* `RequireEncryption` is a boolean value; it will default to false if left out, otherwise, set it to `true` or `false` but do not quote those.
+* `RequireEncryption` is a boolean value; it will default to false if left out.
 
 ## Development
 
@@ -98,7 +98,7 @@ stack_tags:
   OwnerEmail: "it@sagebase.org"
 hooks:
   before_launch:
-    - !cmd "curl https://s3.amazonaws.com/essentials-awss3lambdaartifactsbucket-x29ftznj6pqw/cfn-cf-sc-bucket-policy/master/cfn-cf-sc-bucket-policy.yaml --create-dirs -o templates/remote/cfn-cf-sc-bucket-policy.yaml"
+    - !cmd "curl https://s3.amazonaws.com/bootstrap-awss3cloudformationbucket-19qromfd235z9/cfn-cf-sc-bucket-policy/master/cfn-cf-sc-bucket-policy.yaml --create-dirs -o templates/remote/cfn-cf-sc-bucket-policy.yaml"
 ```
 
 Install the lambda using sceptre:
