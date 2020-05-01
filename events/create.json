@@ -1,0 +1,17 @@
+{
+  "RequestType": "Create",
+  "ServiceToken": "arn:aws:lambda:us-east-1:465877038949:function:cfn-cr-sc-bucket-policy-Function-P9ISWL9MO1NT",
+  "ResponseURL": "https://cloudformation-custom-resource-response-useast1.s3.amazonaws.com/arn%3Aaws%3Acloudformation%3Aus-east-1%3A465877038949%3Astack/SC-465877038949-pp-epeafq2eblgvy/c4cc3170-8a29-11ea-a047-0e23aa861d3d%7CS3BucketPolicy%7Cbf71039c-18db-4d38-8504-7611e8c2a0a5?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20200429T145807Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Credential=AKIA6L7Q4OWTTDPGOFMG%2F20200429%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=8dc18de142d991367ce020fe9ed1e789cd82315061851ea945399209c7f2f92e",
+  "StackId": "arn:aws:cloudformation:us-east-1:465877038949:stack/SC-465877038949-pp-epeafq2eblgvy/c4cc3170-8a29-11ea-a047-0e23aa861d3d",
+  "RequestId": "bf71039c-18db-4d38-8504-7611e8c2a0a5",
+  "LogicalResourceId": "S3BucketPolicy",
+  "ResourceType": "Custom::SCS3BucketPolicy",
+  "ResourceProperties": {
+    "ServiceToken": "arn:aws:lambda:us-east-1:465877038949:function:cfn-cr-sc-bucket-policy-Function-P9ISWL9MO1NT",
+    "RequireEncryption": "true",
+    "BucketName": "sc-465877038949-pp-epeafq2eblgvy-s3bucket-16txqkyktkubl",
+    "ExtraPrincipalArns": [
+      ""
+    ]
+  }
+}

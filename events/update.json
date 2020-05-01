@@ -1,0 +1,26 @@
+{
+  "RequestType": "Update",
+  "ServiceToken": "arn:aws:lambda:us-east-1:465877038949:function:cfn-cr-sc-bucket-policy-Function-P9ISWL9MO1NT",
+  "ResponseURL": "https://cloudformation-custom-resource-response-useast1.s3.amazonaws.com/arn%3Aaws%3Acloudformation%3Aus-east-1%3A465877038949%3Astack/SC-465877038949-pp-epeafq2eblgvy/c4cc3170-8a29-11ea-a047-0e23aa861d3d%7CS3BucketPolicy%7C34bc8ceb-a86b-4c12-b827-8126024b5296?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20200429T150421Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Credential=AKIA6L7Q4OWTTDPGOFMG%2F20200429%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=9ec70b19ee564da8c98007704fff52ed5c3df6108288e0c0a376e091d5d6c82f",
+  "StackId": "arn:aws:cloudformation:us-east-1:465877038949:stack/SC-465877038949-pp-epeafq2eblgvy/c4cc3170-8a29-11ea-a047-0e23aa861d3d",
+  "RequestId": "34bc8ceb-a86b-4c12-b827-8126024b5296",
+  "LogicalResourceId": "S3BucketPolicy",
+  "PhysicalResourceId": "BucketPolicy_sc-465877038949-pp-epeafq2eblgvy-s3bucket-16txqkyktkubl_acb1e9e8-3d29-420d-b5e2-4219f0811b79",
+  "ResourceType": "Custom::SCS3BucketPolicy",
+  "ResourceProperties": {
+    "ServiceToken": "arn:aws:lambda:us-east-1:465877038949:function:cfn-cr-sc-bucket-policy-Function-P9ISWL9MO1NT",
+    "RequireEncryption": "true",
+    "BucketName": "sc-465877038949-pp-epeafq2eblgvy-s3bucket-16txqkyktkubl",
+    "ExtraPrincipalArns": [
+      "arn:aws:iam::563295687221:user/jane.doe@sagebase.org"
+    ]
+  },
+  "OldResourceProperties": {
+    "ServiceToken": "arn:aws:lambda:us-east-1:465877038949:function:cfn-cr-sc-bucket-policy-Function-P9ISWL9MO1NT",
+    "RequireEncryption": "true",
+    "BucketName": "sc-465877038949-pp-epeafq2eblgvy-s3bucket-16txqkyktkubl",
+    "ExtraPrincipalArns": [
+      ""
+    ]
+  }
+}
