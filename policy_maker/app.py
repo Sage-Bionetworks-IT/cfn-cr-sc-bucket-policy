@@ -33,16 +33,9 @@ def get_params(event):
   # strip empties
   extra_principals = [extra for extra in extra_principals if extra]
 
-  require_encryption = str(parameters.get('RequireEncryption', 'false'))
-  if require_encryption.lower() == 'true':
-    require_encryption = True
-  else:
-    require_encryption = False
-
   log.debug((f'Params returned from get_params: bucket_name={bucket_name}, '
-    f'extra_principals={extra_principals}, '
-    f'require_encryption={require_encryption}'))
-  return bucket_name, extra_principals, require_encryption
+    f'extra_principals={extra_principals}'))
+  return bucket_name, extra_principals
 
 
 def get_bucket_tags(bucket):
@@ -78,7 +71,7 @@ def combine_principals(principal, extra_principals):
   return principals
 
 
-def create_policy_document(bucket_name, principals, require_encrypted=False):
+def create_policy_document(bucket_name, principals):
   bucket_arn = f'arn:aws:s3:::{bucket_name}'
   bucket_objects_arn = f'{bucket_arn}/*'
   policy = {
@@ -110,38 +103,7 @@ def create_policy_document(bucket_name, principals, require_encrypted=False):
       }
     ]
   }
-  if require_encrypted:
-    additional_statements = [
-      {
-        'Sid': 'DenyIncorrectEncryptionHeader',
-        'Effect': 'Deny',
-        'Principal': {
-          'AWS': principals
-        },
-        'Action': 's3:PutObject',
-        'Resource': bucket_objects_arn,
-        'Condition': {
-          'StringNotEquals': {
-            's3:x-amz-server-side-encryption': 'AES256'
-          }
-        }
-      },
-      {
-        'Sid': 'DenyUnEncryptedObjectUploads',
-        'Effect': 'Deny',
-        'Principal': {
-          'AWS': principals
-        },
-        'Action': 's3:PutObject',
-        'Resource': bucket_objects_arn,
-        'Condition': {
-          'Null': {
-            's3:x-amz-server-side-encryption': 'true'
-          }
-        }
-      }
-    ]
-    policy['Statement'] = policy['Statement'] + additional_statements
+
   return json.dumps(policy)
 
 
@@ -159,7 +121,7 @@ def attach_policy(bucket_name, policy_document):
 @helper.create
 def create(event, context):
   '''Create or re-create the policy'''
-  bucket_name, extra_principals, require_encryption = get_params(event)
+  bucket_name, extra_principals = get_params(event)
   tags = get_bucket_tags(bucket_name)
   principal_arn = get_principal_tag(tags)
   principals = combine_principals(
@@ -167,8 +129,7 @@ def create(event, context):
     extra_principals=extra_principals)
   policy_document = create_policy_document(
     bucket_name=bucket_name,
-    principals=principals,
-    require_encrypted=require_encryption)
+    principals=principals)
   attach_policy(bucket_name, policy_document)
   aws_request_id = context.aws_request_id
   physical_resource_id = f'BucketPolicy_{bucket_name}_{aws_request_id}'
@@ -181,7 +142,7 @@ def create(event, context):
 @helper.delete
 def delete(event, context):
   '''Delete the policy'''
-  bucket_name, _, _ = get_params(event)
+  bucket_name, _ = get_params(event)
   s3 = get_client('s3')
   try:
     s3.delete_bucket_policy(Bucket=bucket_name)
