@@ -100,6 +100,22 @@ def create_policy_document(bucket_name, principals):
           's3:*MultipartUpload*'
         ],
         'Resource': bucket_objects_arn
+      },
+      {
+        'Sid': 'RequireCanonicalId',
+        'Effect': 'Deny',
+        'Principal': {
+          'AWS': principals
+        },
+        'Action': [
+          's3:PutObject'
+        ],
+        'Resource': bucket_objects_arn,
+        'Condition': {
+          'StringNotEquals': {
+            's3:x-amz-acl': 'bucket-owner-full-control'
+          }
+        }
       }
     ]
   }
