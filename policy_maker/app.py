@@ -12,6 +12,7 @@ log.setLevel(logging.DEBUG)
 helper = CfnResource(
   json_logging=False, log_level='DEBUG', boto_level='CRITICAL')
 
+SYNAPSE_AWS_ACCOUNT_ID = "325565585839"
 
 def get_client(service):
   return boto3.client(service)
@@ -71,52 +72,89 @@ def combine_principals(principal, extra_principals):
   return principals
 
 
-def create_policy_document(bucket_name, principals):
+def create_policy_document(aws_account_id, bucket_name, principals):
   bucket_arn = f'arn:aws:s3:::{bucket_name}'
   bucket_objects_arn = f'{bucket_arn}/*'
   policy = {
-    'Version': '2012-10-17',
-    'Statement': [
-      {
-        'Sid': 'ReadAccess',
-        'Effect': 'Allow',
-        'Principal': {
-          'AWS': principals
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "SynapseObjectAccess",
+            "Effect": "Allow",
+            "Principal": {
+              'AWS': principals
+            },
+            "Action": [
+                "s3:*Object*",
+                "s3:*MultipartUpload*"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "aws:PrincipalAccount": SYNAPSE_AWS_ACCOUNT_ID
+                }
+            },
+            "Resource": bucket_objects_arn
         },
-        'Action': [
-          's3:ListBucket*',
-          's3:GetBucketLocation'
-        ],
-        'Resource': bucket_arn
-      },
-      {
-        'Sid': 'WriteAccess',
-        'Effect': 'Allow',
-        'Principal': {
-          'AWS': principals
+        {
+            "Sid": "BucketAccess",
+            "Effect": "Allow",
+            "Principal": {
+              'AWS': principals
+            },
+            "Action": [
+                "s3:ListBucket*",
+                "s3:GetBucketLocation"
+            ],
+            "Resource": bucket_arn
         },
-        'Action': [
-          's3:*Object*',
-          's3:*MultipartUpload*'
-        ],
-        'Resource': bucket_objects_arn
-      },
-      {
-        'Sid': 'RequireCanonicalId',
-        'Effect': 'Deny',
-        'Principal': {
-          'AWS': principals
+        {
+            "Sid": "ReadObjectAccess",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": principals
+            },
+            "Action": [
+                "s3:GetObject",
+                "s3:GetObjectAcl",
+                "s3:AbortMultipartUpload",
+                "s3:ListMultipartUploadParts"
+            ],
+            "Resource": bucket_objects_arn
         },
-        'Action': [
-          's3:PutObject'
-        ],
-        'Resource': bucket_objects_arn,
-        'Condition': {
-          'StringNotEquals': {
-            's3:x-amz-acl': 'bucket-owner-full-control'
-          }
+        {
+            "Sid": "InternalPutObjectAccess",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": principals
+            },
+            "Action": [
+                "s3:PutObject",
+                "s3:PutObjectAcl"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "aws:PrincipalAccount": aws_account_id
+                }
+            },
+            "Resource": bucket_objects_arn
+        },
+        {
+            "Sid": "ExternalPutObjectAccess",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": principals
+            },
+            "Action": [
+                "s3:PutObject",
+                "s3:PutObjectAcl"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "s3:x-amz-acl": "bucket-owner-full-control"
+                }
+            },
+            "Resource": bucket_objects_arn
         }
-      }
     ]
   }
 
@@ -143,7 +181,9 @@ def create(event, context):
   principals = combine_principals(
     principal=principal_arn,
     extra_principals=extra_principals)
+  aws_account_id = get_client('sts').get_caller_identity().get('Account')
   policy_document = create_policy_document(
+    aws_account_id,
     bucket_name=bucket_name,
     principals=principals)
   attach_policy(bucket_name, policy_document)
