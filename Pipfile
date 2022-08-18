@@ -13,4 +13,4 @@ boto3 = "~=1.17.102"
 crhelper = "~=2.0.10"
 
 [requires]
-python_version = "3.7"
+python_version = "3.8"
