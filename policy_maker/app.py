@@ -116,43 +116,22 @@ def create_policy_document(aws_account_id, bucket_name, principals):
             "Action": [
                 "s3:GetObject",
                 "s3:GetObjectAcl",
-                "s3:AbortMultipartUpload",
                 "s3:ListMultipartUploadParts"
             ],
             "Resource": bucket_objects_arn
         },
         {
-            "Sid": "InternalPutObjectAccess",
+            "Sid": "PutObjectAccess",
             "Effect": "Allow",
             "Principal": {
                 "AWS": principals
             },
             "Action": [
                 "s3:PutObject",
-                "s3:PutObjectAcl"
+                "s3:PutObjectAcl",
+                "s3:DeleteObject",
+                "s3:*MultipartUpload*"
             ],
-            "Condition": {
-                "StringEquals": {
-                    "aws:PrincipalAccount": aws_account_id
-                }
-            },
-            "Resource": bucket_objects_arn
-        },
-        {
-            "Sid": "ExternalPutObjectAccess",
-            "Effect": "Allow",
-            "Principal": {
-                "AWS": principals
-            },
-            "Action": [
-                "s3:PutObject",
-                "s3:PutObjectAcl"
-            ],
-            "Condition": {
-                "StringEquals": {
-                    "s3:x-amz-acl": "bucket-owner-full-control"
-                }
-            },
             "Resource": bucket_objects_arn
         }
     ]

@@ -63,13 +63,12 @@ class TestPolicy(unittest.TestCase):
           "Action": [
             "s3:GetObject",
             "s3:GetObjectAcl",
-            "s3:AbortMultipartUpload",
             "s3:ListMultipartUploadParts"
           ],
           "Resource": "arn:aws:s3:::some-bucket-name/*"
         },
         {
-          "Sid": "InternalPutObjectAccess",
+          "Sid": "PutObjectAccess",
           "Effect": "Allow",
           "Principal": {
             "AWS": [
@@ -78,32 +77,10 @@ class TestPolicy(unittest.TestCase):
           },
           "Action": [
             "s3:PutObject",
-            "s3:PutObjectAcl"
+            "s3:PutObjectAcl",
+            "s3:DeleteObject",
+            "s3:*MultipartUpload*"
           ],
-          "Condition": {
-            "StringEquals": {
-              "aws:PrincipalAccount": "999999999999"
-            }
-          },
-          "Resource": "arn:aws:s3:::some-bucket-name/*"
-        },
-        {
-          "Sid": "ExternalPutObjectAccess",
-          "Effect": "Allow",
-          "Principal": {
-            "AWS": [
-              "arn:aws:iam::1111111111111:user/joe.smith@sagebase.org"
-            ]
-          },
-          "Action": [
-            "s3:PutObject",
-            "s3:PutObjectAcl"
-          ],
-          "Condition": {
-            "StringEquals": {
-              "s3:x-amz-acl": "bucket-owner-full-control"
-            }
-          },
           "Resource": "arn:aws:s3:::some-bucket-name/*"
         }
       ]
