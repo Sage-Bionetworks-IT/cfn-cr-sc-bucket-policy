@@ -129,7 +129,7 @@ def create_policy_document(aws_account_id, bucket_name, principals):
             "Action": [
                 "s3:PutObject",
                 "s3:PutObjectAcl",
-                "s3:DeleteObject",
+                "s3:DeleteObject*",
                 "s3:*MultipartUpload*"
             ],
             "Resource": bucket_objects_arn
