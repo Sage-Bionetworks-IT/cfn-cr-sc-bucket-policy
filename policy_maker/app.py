@@ -79,6 +79,21 @@ def create_policy_document(aws_account_id, bucket_name, principals):
     "Version": "2012-10-17",
     "Statement": [
         {
+            "Sid": "DenyInsecureAccess",
+            "Effect": "Deny",
+            "Principal": '*',
+            "Action": "s3:*",
+            "Resource": [
+                bucket_arn,
+                bucket_objects_arn,
+            ],
+            "Condition": {
+                "Bool": {
+                    "aws:SecureTransport": "false",
+                },
+            },
+        },
+        {
             "Sid": "SynapseObjectAccess",
             "Effect": "Allow",
             "Principal": {
