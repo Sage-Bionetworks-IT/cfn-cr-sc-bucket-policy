@@ -20,6 +20,21 @@ class TestPolicy(unittest.TestCase):
       "Version": "2012-10-17",
       "Statement": [
         {
+          "Sid": "DenyInsecureAccess",
+          "Effect": "Deny",
+          "Principal": "*",
+          "Action": "s3:*",
+          "Condition": {
+            "Bool": {
+              "aws:SecureTransport": "false"
+            }
+          },
+          "Resource": [
+            "arn:aws:s3:::some-bucket-name",
+            "arn:aws:s3:::some-bucket-name/*"
+          ]
+        },
+        {
           "Sid": "SynapseObjectAccess",
           "Effect": "Allow",
           "Principal": {
